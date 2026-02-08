@@ -153,13 +153,17 @@ def get_ptt_articles(board, cutoff=None, session=None):
             title = link_tag.text.strip()
             href = link_tag.get('href', '')
 
+            date_tag = entry.find('div', class_='date')
+            list_date = date_tag.get_text(strip=True) if date_tag else ''
+
             article_id = href.split('/')[-1].replace('.html', '') if href else ''
 
             if article_id:
                 article = {
                     'id': article_id,
                     'title': title,
-                    'url': f'https://www.ptt.cc{href}'
+                    'url': f'https://www.ptt.cc{href}',
+                    'list_date': list_date
                 }
                 if cutoff is not None:
                     article['datetime'] = fetch_article_datetime(article['url'], session=session)
@@ -249,12 +253,16 @@ def fetch_article_datetime(article_url, session=None):
 
 def send_discord_notification(webhook_url, article):
     """發送 Discord 通知"""
+    list_date = article.get('list_date') or '未知'
     payload = {
         'embeds': [{
             'title': article['title'],
             'url': article['url'],
             'color': 5814783,
             'timestamp': datetime.now(timezone.utc).isoformat(),
+            'fields': [
+                {'name': '日期', 'value': list_date, 'inline': True}
+            ],
             'footer': {'text': 'PTT 關鍵字通知'}
         }]
     }
