@@ -41,8 +41,7 @@ env:
 
 - `PTT_BOARD`: PTT 看板名稱（例如：Gossiping、Baseball、Stock）
 - `PTT_KEYWORDS`: 關鍵字列表，使用逗號分隔（例如：地震,颱風,停電）
-- `PTT_DAYS`: 監控文章的天數範圍（預設為 1 天，表示只看最近 1 天的文章）
-- `PTT_PAGES`: 要爬取的頁數（預設為 1 頁，最多 5 頁；每頁約 20 篇文章）
+- `PTT_DAYS`: 監控文章的天數範圍（預設為 1 天，表示只看最近 1 天的文章）。會持續往前翻頁直到超過時間範圍為止
 - `DISCORD_WEBHOOK`: Discord Webhook URL
 
 ## 本地測試
@@ -55,7 +54,6 @@ pip install -r requirements.txt
 export PTT_BOARD="Gossiping"
 export PTT_KEYWORDS="地震,颱風"
 export PTT_DAYS="1"
-export PTT_PAGES="2"
 export DISCORD_WEBHOOK="your_webhook_url"
 
 python ptt_monitor.py
@@ -71,7 +69,7 @@ python ptt_monitor.py
    - 隨機 User-Agent 以避免被封鎖
 
 2. **支援多頁爬取**
-   - 可設定 `PTT_PAGES` 環境變數控制爬取頁數
+   - 依 `PTT_DAYS` 自動往前翻頁到時間範圍外停止
    - 自動處理 PTT 分頁邏輯（index.html → indexN.html → indexN-1.html）
 
 3. **增加請求延遲**
@@ -99,7 +97,7 @@ python ptt_monitor.py
 
 - 某些看板（如 Gossiping）需要滿 18 歲驗證，腳本會自動處理
 - 建議不要設定過多關鍵字，以免漏失通知
-- `processed_ids.txt` 會自動更新並提交到 repository
+- `processed_ids.txt` 會自動更新並提交到 repository（包含時間戳，格式為 `文章ID|ISO時間`）
 
 ## License
 
