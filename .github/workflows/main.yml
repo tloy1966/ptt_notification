@@ -32,8 +32,8 @@ jobs:
       - name: Run PTT Monitor
         env:
           # 在這裡設定環境變數，方便修改
-          PTT_BOARD: 'Gossiping'
-          PTT_KEYWORDS: '地震,颱風'
+          PTT_BOARD: 'mobilesales'
+          PTT_KEYWORDS: 's25 ultra'
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           python ptt_monitor.py
