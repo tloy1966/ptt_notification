@@ -9,7 +9,7 @@ import os
 import sys
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def load_processed_ids(filename='processed_ids.txt'):
@@ -96,7 +96,7 @@ def send_discord_notification(webhook_url, article):
             'title': article['title'],
             'url': article['url'],
             'color': 5814783,  # 藍綠色
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'footer': {
                 'text': 'PTT 關鍵字通知'
             }
