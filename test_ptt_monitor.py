@@ -92,6 +92,24 @@ def test_article_structure():
     print("✓ Article structure test passed\n")
 
 
+def test_user_agent_randomization():
+    """Test that user agent randomization works"""
+    print("Testing user agent randomization...")
+    
+    user_agents = set()
+    for _ in range(20):
+        ua = ptt_monitor.get_user_agent()
+        assert ua, "User agent should not be empty"
+        assert 'Mozilla' in ua, "User agent should contain 'Mozilla'"
+        user_agents.add(ua)
+    
+    # With 20 calls and 6 different UAs, we should see at least 3 different ones
+    assert len(user_agents) >= 3, f"Expected at least 3 different user agents in 20 calls, got {len(user_agents)}"
+    print(f"✓ Generated {len(user_agents)} different user agents in 20 calls")
+    
+    print("✓ User agent randomization test passed\n")
+
+
 if __name__ == '__main__':
     print("=" * 60)
     print("Running PTT Monitor Tests")
@@ -100,6 +118,7 @@ if __name__ == '__main__':
     test_processed_ids()
     test_keyword_matching()
     test_article_structure()
+    test_user_agent_randomization()
     
     print("=" * 60)
     print("All tests passed! ✓")

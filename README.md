@@ -41,6 +41,8 @@ env:
 
 - `PTT_BOARD`: PTT 看板名稱（例如：Gossiping、Baseball、Stock）
 - `PTT_KEYWORDS`: 關鍵字列表，使用逗號分隔（例如：地震,颱風,停電）
+- `PTT_DAYS`: 監控文章的天數範圍（預設為 1 天，表示只看最近 1 天的文章）
+- `PTT_PAGES`: 要爬取的頁數（預設為 1 頁，最多 5 頁；每頁約 20 篇文章）
 - `DISCORD_WEBHOOK`: Discord Webhook URL
 
 ## 本地測試
@@ -52,9 +54,29 @@ pip install -r requirements.txt
 # 設定環境變數並執行
 export PTT_BOARD="Gossiping"
 export PTT_KEYWORDS="地震,颱風"
+export PTT_DAYS="1"
+export PTT_PAGES="2"
 export DISCORD_WEBHOOK="your_webhook_url"
 
 python ptt_monitor.py
+```
+
+## 技術改進
+
+### v2.0 更新內容
+
+1. **改進連線穩定性**
+   - 新增重試機制（最多 3 次）
+   - 指數退避策略避免過度請求
+   - 隨機 User-Agent 以避免被封鎖
+
+2. **支援多頁爬取**
+   - 可設定 `PTT_PAGES` 環境變數控制爬取頁數
+   - 自動處理 PTT 分頁邏輯（index.html → indexN.html → indexN-1.html）
+
+3. **增加請求延遲**
+   - 模擬真實瀏覽器行為
+   - 降低被 PTT 伺服器封鎖的風險
 ```
 
 ## 工作流程
