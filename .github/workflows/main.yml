@@ -3,7 +3,7 @@ name: PTT Monitor
 on:
   # 每 20 分鐘執行一次
   schedule:
-    - cron: '*/20 * * * *'
+    - cron: '*/5 * * * *'
   
   # 允許手動觸發
   workflow_dispatch:
@@ -32,8 +32,8 @@ jobs:
       - name: Run PTT Monitor
         env:
           # 在這裡設定環境變數，方便修改
-          PTT_BOARD: 'mobilesales'
-          PTT_KEYWORDS: 's25 ultra'
+          PTT_BOARD: ${{ vars.PTT_BOARD }}
+          PTT_KEYWORDS: ${{ vars.PTT_KEYWORDS }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           python ptt_monitor.py
