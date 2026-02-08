@@ -34,6 +34,7 @@ jobs:
           # 在這裡設定環境變數，方便修改
           PTT_BOARD: ${{ vars.PTT_BOARD }}
           PTT_KEYWORDS: ${{ vars.PTT_KEYWORDS }}
+          PTT_DAYS: ${{ vars.PTT_DAYS }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           python ptt_monitor.py
