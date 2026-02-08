@@ -97,15 +97,15 @@ def test_user_agent_randomization():
     print("Testing user agent randomization...")
     
     user_agents = set()
-    for _ in range(10):
+    for _ in range(20):
         ua = ptt_monitor.get_user_agent()
         assert ua, "User agent should not be empty"
         assert 'Mozilla' in ua, "User agent should contain 'Mozilla'"
         user_agents.add(ua)
     
-    # Should have at least 2 different user agents in 10 calls (statistically)
-    assert len(user_agents) >= 2, f"Expected at least 2 different user agents, got {len(user_agents)}"
-    print(f"✓ Generated {len(user_agents)} different user agents")
+    # With 20 calls and 6 different UAs, we should see at least 3 different ones
+    assert len(user_agents) >= 3, f"Expected at least 3 different user agents in 20 calls, got {len(user_agents)}"
+    print(f"✓ Generated {len(user_agents)} different user agents in 20 calls")
     
     print("✓ User agent randomization test passed\n")
 
