@@ -28,6 +28,8 @@
 env:
   PTT_BOARD: 'Gossiping'          # 改成你要監控的看板
   PTT_KEYWORDS: '地震,颱風'        # 改成你要監控的關鍵字
+  PTT_DAYS: '1'                   # 監控最近幾天的文章（預設 1 天）
+  PTT_PAGES: '2'                  # 爬取幾頁（預設 1 頁，最多 5 頁）
   DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
 ```
 
@@ -86,10 +88,32 @@ pip install -r requirements.txt
 # 設定環境變數
 export PTT_BOARD="Gossiping"
 export PTT_KEYWORDS="地震,颱風"
+export PTT_DAYS="1"
+export PTT_PAGES="2"
 export DISCORD_WEBHOOK="your_webhook_url"
 
 # 執行腳本
 python ptt_monitor.py
+```
+
+## 🆕 v2.0 更新
+
+### 改進功能
+
+1. **增強連線穩定性**
+   - ✅ 自動重試機制（最多 3 次）
+   - ✅ 指數退避策略
+   - ✅ 隨機 User-Agent 避免封鎖
+
+2. **支援多頁爬取**
+   - ✅ 新增 `PTT_PAGES` 環境變數
+   - ✅ 自動處理 PTT 特殊的分頁邏輯
+   - ✅ 每頁約 20 篇文章
+
+3. **更友善的錯誤處理**
+   - ✅ 詳細的錯誤訊息
+   - ✅ 重試時顯示進度
+   - ✅ 避免因暫時性錯誤而中斷
 ```
 
 ## 📚 更多資訊
