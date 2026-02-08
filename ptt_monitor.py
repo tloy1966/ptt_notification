@@ -18,7 +18,7 @@ def load_processed_ids(filename='processed_ids.txt'):
         return set()
     
     with open(filename, 'r', encoding='utf-8') as f:
-        return set(line.strip() for line in f if line.strip())
+        return set(line.strip() for line in f if line.strip() and not line.strip().startswith('#'))
 
 
 def save_processed_ids(processed_ids, filename='processed_ids.txt'):
