@@ -16,43 +16,6 @@ from datetime import datetime, timezone, timedelta
 TAIPEI_TZ = timezone(timedelta(hours=8))
 
 
-def load_processed_ids(filename='processed_ids.txt'):
-    """讀取已處理過的文章 ID（含時間戳）"""
-    if not os.path.exists(filename):
-        return {}
-
-    with open(filename, 'r', encoding='utf-8') as f:
-        processed = {}
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-            if '|' in line:
-                article_id, ts = line.split('|', 1)
-                try:
-                    dt = datetime.fromisoformat(ts)
-                    if dt.tzinfo is None:
-                        dt = dt.replace(tzinfo=TAIPEI_TZ)
-                except ValueError:
-                    dt = None
-            else:
-                article_id = line
-                dt = None
-            processed[article_id] = dt
-        return processed
-
-
-def save_processed_ids(processed_ids, filename='processed_ids.txt'):
-    """儲存已處理過的文章 ID（含時間戳）"""
-    with open(filename, 'w', encoding='utf-8') as f:
-        for article_id in sorted(processed_ids):
-            dt = processed_ids.get(article_id)
-            if dt:
-                f.write(f"{article_id}|{dt.isoformat()}\n")
-            else:
-                f.write(f"{article_id}\n")
-
-
 def get_user_agent():
     """取得隨機的 User-Agent 字串以避免被封鎖"""
     user_agents = [
@@ -314,9 +277,6 @@ def main():
     print(f"時間範圍：今天往回 {days} 天（>= {cutoff}）")
     print("-" * 50)
 
-    processed_ids = load_processed_ids()
-    print(f"已載入 {len(processed_ids)} 個已處理的文章 ID")
-
     articles = get_ptt_articles(board, cutoff=cutoff, session=session)
     print(f"取得 {len(articles)} 篇文章")
 
@@ -329,39 +289,21 @@ def main():
         article_id = article['id']
         title = article['title']
 
-        if article_id in processed_ids:
-            continue
-
         # Filter by datetime (requires fetching article page)
         post_dt = article.get('datetime') or fetch_article_datetime(article['url'], session=session)
         if post_dt is None:
             # If can't parse time, skip (or choose to process anyway)
-            processed_ids[article_id] = now_tz
             continue
 
         if post_dt < cutoff:
             # too old; skip and mark processed to avoid refetching every run
-            processed_ids[article_id] = post_dt
             continue
 
         matched = any(keyword.lower() in title.lower() for keyword in keywords)
         if matched:
             print(f"發現匹配文章：{title}")
             send_discord_notification(webhook_url, article)
-            processed_ids[article_id] = post_dt
             new_matches += 1
-        else:
-            processed_ids[article_id] = post_dt
-
-    if days > 0:
-        processed_ids = {
-            article_id: dt
-            for article_id, dt in processed_ids.items()
-            if dt is None or dt >= cutoff
-        }
-
-    save_processed_ids(processed_ids)
-    print(f"已儲存 {len(processed_ids)} 個文章 ID")
     print(f"本次發現 {new_matches} 篇新匹配文章")
 
 

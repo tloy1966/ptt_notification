@@ -6,7 +6,6 @@
 
 - 🔍 自動爬取 PTT 指定看板的文章
 - 🔔 關鍵字匹配後發送 Discord 通知
-- 🚫 防止重複通知（使用 `processed_ids.txt` 記錄已處理文章）
 - ⏰ 每 20 分鐘自動執行（透過 GitHub Actions）
 - 🛠️ 支援手動觸發執行
 
@@ -83,8 +82,7 @@ python ptt_monitor.py
 2. 爬取指定 PTT 看板的第一頁文章
 3. 檢查文章標題是否包含關鍵字
 4. 發現匹配的新文章時發送 Discord 通知
-5. 將文章 ID 記錄到 `processed_ids.txt` 避免重複通知
-6. 自動 commit 並 push `processed_ids.txt` 的變更
+5. 發現匹配的新文章時發送 Discord 通知
 
 ## 技術架構
 
@@ -97,7 +95,6 @@ python ptt_monitor.py
 
 - 某些看板（如 Gossiping）需要滿 18 歲驗證，腳本會自動處理
 - 建議不要設定過多關鍵字，以免漏失通知
-- `processed_ids.txt` 會自動更新並提交到 repository（包含時間戳，格式為 `文章ID|ISO時間`）
 
 ## License
 
