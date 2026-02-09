@@ -40,12 +40,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Run PTT Monitor
+      - name: Run PTT Monitor for borad 1
         env:
           # 在這裡設定環境變數，方便修改
           PTT_BOARD: ${{ vars.PTT_BOARD }}
           PTT_KEYWORDS: ${{ vars.PTT_KEYWORDS }}
           PTT_DAYS: ${{ vars.PTT_DAYS }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          python ptt_monitor.py
+
+      - name: Run PTT Monitor for borad 2
+        env:
+          # 在這裡設定環境變數，方便修改
+          PTT_BOARD: ${{ vars.PTT_BOARD_2 }}
+          PTT_KEYWORDS: ${{ vars.PTT_KEYWORDS_2 }}
+          PTT_DAYS: ${{ vars.PTT_LOOK_BACK_DAYS_2 }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_2 }}
         run: |
           python ptt_monitor.py
