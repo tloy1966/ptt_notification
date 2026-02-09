@@ -8,12 +8,14 @@ on:
   # 允許手動觸發
   workflow_dispatch:
 
+  # main 分支有更新時觸發
+  push:
+    branches:
+      - main
+
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write  # Required for pushing changes back to the repository
     
     steps:
       - name: Checkout repository
@@ -35,7 +37,6 @@ jobs:
           PTT_BOARD: ${{ vars.PTT_BOARD }}
           PTT_KEYWORDS: ${{ vars.PTT_KEYWORDS }}
           PTT_DAYS: ${{ vars.PTT_DAYS }}
-          PTT_PAGES: ${{ vars.PTT_PAGES }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           python ptt_monitor.py
