@@ -217,17 +217,11 @@ def fetch_article_datetime(article_url, session=None):
 def send_discord_notification(webhook_url, article):
     """發送 Discord 通知"""
     list_date = article.get('list_date') or '未知'
+    title = article.get('title', '')
+    url = article.get('url', '')
+    content = f"{list_date} | {title} {url}".strip()
     payload = {
-        'embeds': [{
-            'title': article['title'],
-            'url': article['url'],
-            'color': 5814783,
-            'timestamp': datetime.now(timezone.utc).isoformat(),
-            'fields': [
-                {'name': '日期', 'value': list_date, 'inline': True}
-            ],
-            'footer': {'text': 'PTT 關鍵字通知'}
-        }]
+        'content': content
     }
 
     try:
