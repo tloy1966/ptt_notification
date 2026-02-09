@@ -3,7 +3,7 @@ name: PTT Monitor
 on:
   # 每 30 分鐘執行一次
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/30 8-23 * * *'
   
   # 允許手動觸發
   workflow_dispatch:
@@ -20,6 +20,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Log run info
+        run: |
+          echo "Workflow run: $GITHUB_WORKFLOW"
+          echo "Run ID: $GITHUB_RUN_ID"
+          echo "Run number: $GITHUB_RUN_NUMBER"
+          echo "Commit: $GITHUB_SHA"
+          echo "Ref: $GITHUB_REF"
+          echo "Timestamp (UTC): $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
       
       - name: Set up Python
         uses: actions/setup-python@v5
