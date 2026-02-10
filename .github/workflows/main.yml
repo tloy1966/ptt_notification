@@ -3,7 +3,7 @@ name: PTT Monitor
 on:
   # 每 30 分鐘執行一次
   schedule:
-    - cron: '*/30 8-23 * * *'
+    - cron: '*/30 0-15 * * *'
   
   # 允許手動觸發
   workflow_dispatch:
