@@ -51,6 +51,7 @@ jobs:
           python ptt_monitor.py
 
       - name: Run PTT Monitor for borad 2
+        if: false  # 新增這行即可停用
         env:
           # 在這裡設定環境變數，方便修改
           PTT_BOARD: ${{ vars.PTT_BOARD_2 }}
